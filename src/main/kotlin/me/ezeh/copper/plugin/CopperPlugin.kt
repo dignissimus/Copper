@@ -71,10 +71,9 @@ class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: /*C
     override fun getServer() = Bukkit.getServer()
 
     override fun onDisable() {
-        if (programme.methods.containsKey("ondisable"))
-            programme.methods["ondisable"]?.call()
-        else if (programme.methods.containsKey("onDisable"))
-            programme.methods["ondisable"]?.call()
+        if (programme.environment.hasMethod("ondisable")){
+
+        }
     }
 
     override fun getDefaultWorldGenerator(p0: String?, p1: String?): ChunkGenerator {

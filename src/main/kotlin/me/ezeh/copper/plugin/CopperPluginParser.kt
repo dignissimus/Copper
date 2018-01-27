@@ -9,7 +9,6 @@ import me.ezeh.copper.lang.*
 class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
     lateinit var programme: CopperProgramme
     override fun visitProgramme(context: CopperParser.ProgrammeContext): CopperProgramme {
-        val programme = CopperProgramme()
         val expressions = ArrayList<CopperExpression>()
         val methods = ArrayList<CopperMethodDeclaration>()
         val info: CopperInfo
@@ -25,9 +24,10 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
         for (expressionContext in context.expression()) {
             expressions.add(visitExpression(expressionContext))
         }
-        programme.info = info
-        programme.methods = methods.map { it.name }.zip(methods).toMap()
-        programme.expressions = expressions
+        val programme = CopperProgramme(info, expressions)
+        for (method in methods) {
+            programme.environment.addMethod(method.name, method)
+        }
         return programme
     }
 

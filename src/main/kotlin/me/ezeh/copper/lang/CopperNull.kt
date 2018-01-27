@@ -4,8 +4,4 @@ class CopperNull : CopperExpression {
     companion object {
         val instance = CopperNull()
     }
-
-    override fun evaluate(): CopperExpression {
-        return this
-    }
 }

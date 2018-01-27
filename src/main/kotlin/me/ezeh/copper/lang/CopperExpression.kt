@@ -3,7 +3,7 @@ package me.ezeh.copper.lang
 import me.ezeh.copper.exception.InvalidVariableName
 
 interface CopperExpression {
-    fun evaluate(): CopperExpression
+    fun evaluate() = this
     fun isTrue(): Boolean {
         val evaluated = this.evaluate()
         if (evaluated is CopperBool && evaluated.value)
