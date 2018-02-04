@@ -1,21 +1,27 @@
 package me.ezeh.copper.plugin
 
+import me.ezeh.copper.config.JsonConfiguration
 import me.ezeh.copper.lang.CopperProgramme
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
-import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.generator.ChunkGenerator
 import org.bukkit.plugin.PluginBase
 import org.bukkit.plugin.PluginDescriptionFile
-import org.bukkit.plugin.PluginLoader
 import java.io.File
 import java.io.InputStream
 
-class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: /*Copper*/PluginLoader) : PluginBase() {
-    override fun getDataFolder(): File {
-        TODO("not implemented")
+class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: CopperPluginLoader) : PluginBase() {
+    companion object {
+        val CONFIG_FILE_NAME = "config.json"
     }
+
+    private val pluginDataFolder = File(pluginLoader.scriptDirectory, description.name)
+    private val configFile = File(pluginDataFolder, CONFIG_FILE_NAME)
+    val pluginConfig = JsonConfiguration()
+    var pluginNaggable = false
+
+    override fun getDataFolder() = pluginDataFolder
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         TODO("not implemented")
@@ -33,15 +39,11 @@ class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: /*C
         TODO("not implemented")
     }
 
-    override fun isNaggable(): Boolean {
-        TODO("not implemented")
-    }
+    override fun isNaggable() = pluginNaggable
 
     override fun getLogger() = Bukkit.getLogger()
 
-    override fun reloadConfig() {
-        TODO("not implemented")
-    }
+    override fun reloadConfig() = pluginConfig.load(configFile)
 
     override fun onEnable() {
         programme.execute()
@@ -53,36 +55,28 @@ class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: /*C
         // Do nothing
     }
 
-    override fun setNaggable(p0: Boolean) {
-        TODO("not implemented")
+    override fun setNaggable(naggable: Boolean) {
+        pluginNaggable = naggable
     }
 
-    override fun getConfig(): FileConfiguration {
-        TODO("not implemented")
-    }
+    override fun getConfig() = pluginConfig
 
     override fun getPluginLoader() = pluginLoader
 
 
-    override fun getDescription(): PluginDescriptionFile {
-        return PluginDescriptionFile(programme.info.value["name"]?.asValue()?.value.toString(), programme.info.value["version"]?.asValue()?.value.toString(), "")
-    }
+    override fun getDescription(): PluginDescriptionFile = programme.info.asDescriptionFile()
 
     override fun getServer() = Bukkit.getServer()
 
     override fun onDisable() {
-        if (programme.environment.hasMethod("ondisable")){
-
+        if (programme.environment.hasMethod("onDisable")) {
+            programme.environment.getMethod("onDisable").call()
         }
     }
 
-    override fun getDefaultWorldGenerator(p0: String?, p1: String?): ChunkGenerator {
-        TODO("not implemented")
-    }
+    override fun getDefaultWorldGenerator(worldName: String, id: String): ChunkGenerator? = null
 
-    override fun saveConfig() {
-        TODO("not implemented")
-    }
+    override fun saveConfig() = config.save(configFile)
 
     override fun saveResource(p0: String?, p1: Boolean) {
         TODO("not implemented")

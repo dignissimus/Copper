@@ -1,6 +1,6 @@
 grammar Copper;
 
-programme: info? (methodDeclaration | expression)*;
+programme: info? (methodDeclaration | listener | expression)*;
 expression:
     methodCall
     | bool
@@ -12,8 +12,9 @@ expression:
     | PREUNOP expression
     | returnStatement; // Passing off a statement like this as an expression probably won't do well
 
+listener: ON listener_name=NAME (OPENBRACKET (variable (',' variable)*)? CLOSEBRACKET)? ( OPENBRACE expression* CLOSEBRACE | expression);
 info: INFO OPENBRACE (variable ':' literal)* CLOSEBRACE;
-methodDeclaration: METHOD method_name=NAME (OPENBRACKET variable* CLOSEBRACE | NAME*) (OPENBRACE expression* CLOSEBRACE | EQUALS expression);
+methodDeclaration: FUNCTION method_name=NAME (OPENBRACKET (variable (',' variable)*)? CLOSEBRACE | variable*) (OPENBRACE expression* CLOSEBRACE | EQUALS expression);
 methodCall: method_name=NAME OPENBRACKET (expression (',' expression)*)? CLOSEBRACKET;
 bool: TRUE | FALSE;
 literal: DecimalLiteral | HexLiteral | StringLiteral;
@@ -21,8 +22,10 @@ ifStatement: IF (expression|OPENBRACKET expression CLOSEBRACKET) (expression | O
 elseStatement: ELSE (expression| OPENBRACKET expression CLOSEBRACKET) (expression| OPENBRACE expression* CLOSEBRACE);
 variable: NAME;
 returnStatement: RETURN expression;
+
+ON: 'on';
 RETURN: 'return';
-METHOD: 'method';
+FUNCTION: 'function';
 INFO: 'info';
 BINOP:
     [+*/-]

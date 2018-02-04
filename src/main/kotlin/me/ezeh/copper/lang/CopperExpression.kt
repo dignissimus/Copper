@@ -1,7 +1,5 @@
 package me.ezeh.copper.lang
 
-import me.ezeh.copper.exception.InvalidVariableName
-
 interface CopperExpression {
     fun evaluate() = this
     fun isTrue(): Boolean {

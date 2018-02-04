@@ -11,28 +11,29 @@ import org.bukkit.plugin.*
 import java.io.File
 import java.util.regex.Pattern
 
-class CopperPluginLoader : PluginLoader {
-    override fun createRegisteredListeners(p0: Listener, p1: Plugin): MutableMap<Class<out Event>, MutableSet<RegisteredListener>> {
+class CopperPluginLoader(val scriptDirectory: File) : PluginLoader {
+    override fun createRegisteredListeners(listener: Listener, plugin: Plugin): MutableMap<Class<out Event>, MutableSet<RegisteredListener>> {
         TODO("not implemented")
     }
 
-    override fun disablePlugin(p0: Plugin) {
-        TODO("not implemented")
+    override fun disablePlugin(plugin: Plugin) {
+        if (plugin !is CopperPlugin)
+            throw IllegalArgumentException("Plugin is not associated with this PluginLoader")
+        plugin.onDisable()
     }
 
-    override fun getPluginFileFilters(): Array<Pattern> {
-        TODO("not implemented")
-    }
+    override fun getPluginFileFilters(): Array<Pattern> = arrayOf(".*?\\.cp$".toPattern())
 
-    override fun getPluginDescription(file: File?): PluginDescriptionFile {
-        TODO("not implemented")
-    }
+    override fun getPluginDescription(file: File): PluginDescriptionFile = this.loadPlugin(file).description
+
 
     override fun enablePlugin(plugin: Plugin) {
-        TODO("not implemented")
+        if (plugin !is CopperPlugin)
+            throw IllegalArgumentException("Plugin is not associated with this PluginLoader")
+        plugin.onEnable()
     }
 
-    override fun loadPlugin(file: File): CopperPlugin {
+    override fun loadPlugin(file: File): CopperPlugin { // TODO: throw InvalidPluginException when necessary
         val code = file.readText()
         val lexed = CopperLexer(CharStreams.fromString(code))
         val tokens = CommonTokenStream(lexed)

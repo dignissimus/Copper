@@ -11,7 +11,9 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
     override fun visitProgramme(context: CopperParser.ProgrammeContext): CopperProgramme {
         val expressions = ArrayList<CopperExpression>()
         val methods = ArrayList<CopperMethodDeclaration>()
+        val listeners = ArrayList<CopperListener>()
         val info: CopperInfo
+
         if (context.info() != null) {
             info = visitInfo(context.info())
         } else {
@@ -24,15 +26,26 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
         for (expressionContext in context.expression()) {
             expressions.add(visitExpression(expressionContext))
         }
-        val programme = CopperProgramme(info, expressions)
+        for(listenerContext in context.listener()){
+            expressions.add(visitListener(listenerContext))
+        }
+        val programme = CopperProgramme(info, listeners, expressions)
         for (method in methods) {
             programme.environment.addMethod(method.name, method)
         }
         return programme
     }
 
+    override fun visitListener(context: CopperParser.ListenerContext): CopperListener {
+        val args = context.variable()
+        val expressions = context.expression()
+
+
+        return CopperListener() // TODO
+    }
+
     override fun visitInfo(context: CopperParser.InfoContext): CopperInfo {
-        return CopperInfo(context.variable().map { visitVariable(it).name }.zip(context.literal().map { visitLiteral(it) }).toMap())
+        return CopperInfo(context.variable().map { visitVariable(it).name }.zip(context.literal().map { visitLiteral(it).evaluate().asValue() }).toMap())
     }
 
     override fun visitVariable(context: CopperParser.VariableContext): CopperVariable {

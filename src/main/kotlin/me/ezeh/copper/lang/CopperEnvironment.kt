@@ -7,6 +7,7 @@ import me.ezeh.copper.exception.MethodAlreadyExistsException
 class CopperEnvironment {
     private val methods: MutableMap<String, CopperMethodDeclaration> = mutableMapOf()
     private val variables: MutableMap<String, CopperValue> = mutableMapOf()
+    private val listeners = emptyList<CopperListener>()
 
     fun getMethod(methodName: String): CopperMethodDeclaration {
         val matches = methods.toList().filter { it.second.name.toLowerCase() == methodName.toLowerCase() }

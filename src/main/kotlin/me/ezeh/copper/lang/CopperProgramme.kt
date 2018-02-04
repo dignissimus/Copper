@@ -1,6 +1,6 @@
 package me.ezeh.copper.lang
 
-class CopperProgramme(val info: CopperInfo, val expressions: List<CopperExpression>) : CopperExpression {
+class CopperProgramme(val info: CopperInfo, val listeners: Collection<CopperListener>, val expressions: List<CopperExpression>) : CopperExpression {
     val environment = CopperEnvironment()
 
     fun execute(): CopperExpression {
