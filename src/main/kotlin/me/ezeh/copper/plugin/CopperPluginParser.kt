@@ -1,14 +1,9 @@
 package me.ezeh.copper.plugin
 
-import me.ezeh.copper.lang.CopperBaseVisitor
-import me.ezeh.copper.lang.CopperMethodDeclaration
-import me.ezeh.copper.lang.CopperParser
-import me.ezeh.copper.lang.CopperProgramme
 import me.ezeh.copper.lang.*
-import kotlin.math.exp
 
 class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
-    lateinit var programme: CopperProgramme
+    val programme = CopperProgramme()
     override fun visitProgramme(context: CopperParser.ProgrammeContext): CopperProgramme {
         val expressions = ArrayList<CopperExpression>()
         val methods = ArrayList<CopperMethodDeclaration>()
@@ -21,16 +16,17 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
             throw TODO("Create Exception")
         }
 
+        programme.info = info
+
         for (methodDeclarationContext in context.methodDeclaration()) {
             methods.add(visitMethodDeclaration(methodDeclarationContext))
         }
         for (expressionContext in context.expression()) {
-            expressions.add(visitExpression(expressionContext))
+            programme.addExpression(visitExpression(expressionContext))
         }
         for(listenerContext in context.listener()){
-            listeners.add(visitListener(listenerContext))
+            programme.addListener(visitListener(listenerContext))
         }
-        val programme = CopperProgramme(info, listeners, expressions)
         for (method in methods) {
             programme.environment.addMethod(method.name, method)
         }
@@ -52,10 +48,26 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
     }
 
     override fun visitVariable(context: CopperParser.VariableContext): CopperVariable {
-        return CopperVariable(context.text)
+        return CopperVariable(context.text, programme)
     }
 
-    override fun visitBool(context: CopperParser.BoolContext): CopperExpression {
+    override fun visitAssignment(context: CopperParser.AssignmentContext): CopperAssignment {
+        return CopperAssignment(visitVariable(context.variable()), visitExpression(context.expression()), programme)
+    }
+
+    override fun visitSuccessful(context: CopperParser.SuccessfulContext): CopperExpression {
+        return CopperStatus.SUCCESS
+    }
+
+    override fun visitUnsuccessful(context: CopperParser.UnsuccessfulContext): CopperExpression {
+        return CopperStatus.FAILURE
+    }
+
+    override fun visitReturnStatement(context: CopperParser.ReturnStatementContext): CopperReturn {
+        return CopperReturn(visitExpression(context.expression()))
+    }
+
+    override fun visitBool(context: CopperParser.BoolContext): CopperBool {
         if (context.TRUE() != null) {
             return CopperBool(true)
         }

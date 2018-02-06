@@ -4,11 +4,11 @@ interface CopperExpression {
     fun evaluate() = this
     fun isTrue(): Boolean {
         val evaluated = this.evaluate()
-        if (evaluated is CopperBool && evaluated.value)
-            return true
+        if (evaluated is CopperBool)
+            return evaluated.value
 
-        if (evaluated !is CopperNull)
-            return true
+        if (evaluated is CopperStatus)
+            return evaluated.value == CopperStatus.Status.SUCCESSFUL
 
         return false
     }

@@ -46,9 +46,9 @@ class CopperEnvironment {
         }
         else
             variables[varName] = value
-
-
     }
+
+    fun setVariable(variable: CopperVariable, value: CopperValue) = setVariable(variable.name, value)
 
     fun getVariable(varName: String): CopperValue {
         if (!hasVariable(varName))

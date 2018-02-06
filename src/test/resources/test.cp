@@ -1,5 +1,5 @@
 info {
-    name: "listener-test"
+    name: "test"
     version: "1.0" // comment test
 }
 
@@ -15,7 +15,16 @@ print("Hello!")
 
 testIfStatements {
     BOOL = false
-    return if(BOOL) "Boolean Test: Unsuccessful" else "Boolean Test: Successful" // Should enter the else statement // TODO: make `return successful` work
+    return if(BOOL) unsuccessful else successful // Should enter the else statement, can use failed instead of unsuccessful
 }
 
+testBracelessIfStatement {
+    BOOL = true
+    actual = if BOOL then successful else unsuccessful // Unnecessary 'then' // Returns unsuccessful, TODO: fix
+}
+
+print("Boolean Test (A)...") // TODO: make brackets unnecessary in function calls with at least one parameter
 print(testIfStatements())
+
+print("Boolean Test (B)...")
+print(testBracelessIfStatement())

@@ -1,6 +1,10 @@
 package me.ezeh.copper.lang
 
-class CopperProgramme(val info: CopperInfo, val listeners: List<CopperListener>, val expressions: List<CopperExpression>) : CopperExpression {
+class CopperProgramme : CopperExpression {
+    // TODO: does this have to be lateinit?
+    lateinit var info: CopperInfo
+    val listeners = mutableListOf<CopperListener>()
+    val expressions = mutableListOf<CopperExpression>()
     val environment = CopperEnvironment()
 
     init {
@@ -14,6 +18,14 @@ class CopperProgramme(val info: CopperInfo, val listeners: List<CopperListener>,
             expression.evaluate()
         }
         return this
+    }
+
+    fun addExpression(expression: CopperExpression) {
+        expressions.add(expression)
+    }
+
+    fun addListener(listener: CopperListener) {
+        listeners.add(listener)
     }
 
 }

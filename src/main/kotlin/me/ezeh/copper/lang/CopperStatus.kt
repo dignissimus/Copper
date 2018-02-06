@@ -6,7 +6,7 @@ abstract class CopperStatus(override val value: Status) : CopperValue() {
         val FAILURE = CopperFailure()
     }
 
-    enum class Status { // TODO: rename?
+    enum class Status {
         SUCCESSFUL, UNSUCCESSFUL
     }
 }

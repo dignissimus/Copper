@@ -28,10 +28,11 @@ class CopperPluginLoader(val scriptDirectory: File) : PluginLoader {
 
 
     override fun enablePlugin(plugin: Plugin) {
-//        if(plugin.isEnabled) // TODO: isEnabled checj
-
         if (plugin !is CopperPlugin)
             throw IllegalArgumentException("Plugin is not associated with this PluginLoader")
+
+//        if(plugin.isEnabled) // TODO: isEnabled check
+
         plugin.onEnable()
         println("Enabled plugin '${plugin.name}'")
     }
