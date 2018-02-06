@@ -16,9 +16,11 @@ class Copper : JavaPlugin() {
 
 
         val scripts = scriptDirectory.listFiles().filter { it.name.endsWith(".cp") }
+        val pluginLoader = CopperPluginLoader(scriptDirectory)
         for (script in scripts) {
-            val plugin = CopperPluginLoader(scriptDirectory).loadPlugin(script)
-            println("Loaded '${plugin.name}'")
+            val plugin = pluginLoader.loadPlugin(script)
+            pluginLoader.enablePlugin(plugin)
+
         }
 
     }

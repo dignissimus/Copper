@@ -12,10 +12,10 @@ expression:
     | PREUNOP expression
     | returnStatement; // Passing off a statement like this as an expression probably won't do well
 
-listener: ON listener_name=NAME (OPENBRACKET (variable (',' variable)*)? CLOSEBRACKET)? ( OPENBRACE expression* CLOSEBRACE | expression);
-info: INFO OPENBRACE (variable ':' literal)* CLOSEBRACE;
-methodDeclaration: FUNCTION method_name=NAME (OPENBRACKET (variable (',' variable)*)? CLOSEBRACE | variable*) (OPENBRACE expression* CLOSEBRACE | EQUALS expression);
-methodCall: method_name=NAME OPENBRACKET (expression (',' expression)*)? CLOSEBRACKET;
+listener: ON listener_name=NAME ( (variable EQUALS expression (COMMA variable EQUALS expression)*)? | OPENBRACKET (variable EQUALS expression (COMMA variable EQUALS expression)*)? CLOSEBRACKET) ( OPENBRACE expression* CLOSEBRACE | expression);
+info: INFO OPENBRACE (variable COLON literal)* CLOSEBRACE;
+methodDeclaration: FUNCTION method_name=NAME (OPENBRACKET (variable (COMMA variable)*)? CLOSEBRACE | variable*) (OPENBRACE expression* CLOSEBRACE | EQUALS expression);
+methodCall: method_name=NAME OPENBRACKET (expression (COMMA expression)*)? CLOSEBRACKET;
 bool: TRUE | FALSE;
 literal: DecimalLiteral | HexLiteral | StringLiteral;
 ifStatement: IF (expression|OPENBRACKET expression CLOSEBRACKET) (expression | OPENBRACE expression* CLOSEBRACE) elseStatement?;
@@ -23,6 +23,8 @@ elseStatement: ELSE (expression| OPENBRACKET expression CLOSEBRACKET) (expressio
 variable: NAME;
 returnStatement: RETURN expression;
 
+COMMA: ',';
+COLON: ':';
 ON: 'on';
 RETURN: 'return';
 FUNCTION: 'function';
@@ -34,7 +36,7 @@ BINOP:
 
 POSTUNOP: '!';
 PREUNOP: '-';
-EQUALS: ':';
+EQUALS: '=';
 
 TRUE: 'true';
 FALSE: 'false';

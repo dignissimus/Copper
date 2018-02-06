@@ -3,13 +3,14 @@ package me.ezeh.copper.lang
 import me.ezeh.copper.exception.InvalidMethodName
 import me.ezeh.copper.exception.InvalidVariableName
 import me.ezeh.copper.exception.MethodAlreadyExistsException
+import me.ezeh.copper.lang.methods.PrintMethod
 
 class CopperEnvironment {
-    private val methods: MutableMap<String, CopperMethodDeclaration> = mutableMapOf()
+    private val methods: MutableMap<String, CopperMethod> = mutableMapOf("print" to PrintMethod())
     private val variables: MutableMap<String, CopperValue> = mutableMapOf()
     private val listeners = emptyList<CopperListener>()
 
-    fun getMethod(methodName: String): CopperMethodDeclaration {
+    fun getMethod(methodName: String): CopperMethod{
         val matches = methods.toList().filter { it.second.name.toLowerCase() == methodName.toLowerCase() }
 
         if (matches.isEmpty())
@@ -24,7 +25,7 @@ class CopperEnvironment {
 
     }
 
-    fun addMethod(methodName: String, method: CopperMethodDeclaration) {
+    fun addMethod(methodName: String, method: CopperMethod) {
         if (hasMethod(methodName))
             throw MethodAlreadyExistsException(methodName)
         methods[methodName] = method

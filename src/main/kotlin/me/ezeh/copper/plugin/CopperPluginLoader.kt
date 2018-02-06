@@ -28,9 +28,12 @@ class CopperPluginLoader(val scriptDirectory: File) : PluginLoader {
 
 
     override fun enablePlugin(plugin: Plugin) {
+//        if(plugin.isEnabled) // TODO: isEnabled checj
+
         if (plugin !is CopperPlugin)
             throw IllegalArgumentException("Plugin is not associated with this PluginLoader")
         plugin.onEnable()
+        println("Enabled plugin '${plugin.name}'")
     }
 
     override fun loadPlugin(file: File): CopperPlugin { // TODO: throw InvalidPluginException when necessary
@@ -40,14 +43,21 @@ class CopperPluginLoader(val scriptDirectory: File) : PluginLoader {
         val programme = CopperPluginParser().visitProgramme(CopperParser(tokens).programme())
         val plugin = CopperPlugin(programme, this)
 
-        val pluginManager = Bukkit.getPluginManager() as SimplePluginManager
-        val spmClass = SimplePluginManager::class.java
-        val pluginsField = spmClass.getDeclaredField("plugins")
-        pluginsField.isAccessible = true
-        val loadedPlugins = pluginsField.get(pluginManager) as ArrayList<Plugin>
-        loadedPlugins.add(plugin)
-        pluginsField.set(pluginManager, loadedPlugins)
-
+        try { // try except?
+            val pluginManager = Bukkit.getPluginManager() as SimplePluginManager
+            val spmClass = SimplePluginManager::class.java
+            val pluginsField = spmClass.getDeclaredField("plugins")
+            pluginsField.isAccessible = true
+            val loadedPlugins = pluginsField.get(pluginManager) as ArrayList<Plugin>
+            loadedPlugins.add(plugin)
+            pluginsField.set(pluginManager, loadedPlugins)
+        }
+        catch (exception: NullPointerException) {
+            // Bukkit class not defined
+            println("Bukkit not found")
+        }
+        plugin.onLoad()
+        println("Loaded plugin '${plugin.name}'")
         return plugin
     }
 }

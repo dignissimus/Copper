@@ -5,6 +5,7 @@ import me.ezeh.copper.lang.CopperMethodDeclaration
 import me.ezeh.copper.lang.CopperParser
 import me.ezeh.copper.lang.CopperProgramme
 import me.ezeh.copper.lang.*
+import kotlin.math.exp
 
 class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
     lateinit var programme: CopperProgramme
@@ -27,7 +28,7 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
             expressions.add(visitExpression(expressionContext))
         }
         for(listenerContext in context.listener()){
-            expressions.add(visitListener(listenerContext))
+            listeners.add(visitListener(listenerContext))
         }
         val programme = CopperProgramme(info, listeners, expressions)
         for (method in methods) {
@@ -37,11 +38,13 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
     }
 
     override fun visitListener(context: CopperParser.ListenerContext): CopperListener {
-        val args = context.variable()
-        val expressions = context.expression()
+        val listenerName = context.listener_name.text
+        val filterKeys = context.variable().map { it.text }
+        val expressions = context.expression().map { visitExpression(it) } // TODO: decide whether to evaluate now or later, currently evaluating when the event is fired
+        val filterValues = expressions.dropLast(expressions.size - filterKeys.size) // return all the filter values
+        val filters = filterKeys.zip(filterValues)
 
-
-        return CopperListener() // TODO
+        return CopperListener(listenerName, filters)
     }
 
     override fun visitInfo(context: CopperParser.InfoContext): CopperInfo {
