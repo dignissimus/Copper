@@ -53,7 +53,7 @@ else {
   value = 2
 }
 
-value = if(BOOL) 1 else 2
+value = if(BOOL) 1 else 2 // Into this
 ```
 
 With if statements, the brackets around the condition are unneccesary but when leaving them out, it may be better to add a `then` after the condition to make the code easier to comprehend.
@@ -63,4 +63,4 @@ value = if bool then 0 else 1 // Value should equal 1
 ```
 ## Installation
 
-> To install, place the Copper.jar archive in your plugins folder and insert your Copper scritps in the `plugins/Copper/scripts` directory created when the plugin first runs
+> To install, place the Copper.jar archive in your plugins folder and insert your Copper scripts in the `plugins/Copper/scripts` directory created when the plugin first runs
