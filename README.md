@@ -14,7 +14,7 @@ info {
 Every script must start with an info block, this is a bit like the plugin.yml in Java plugins.
 
 Unlike Java Plugins however, there is no need to define an `onEnable` method, you can write your code int the body of the scrpt.
-```python
+```javascript
 print("Hello, World!") // Prints 'Hello, World!' when the plugin is enabled
 ```
 
