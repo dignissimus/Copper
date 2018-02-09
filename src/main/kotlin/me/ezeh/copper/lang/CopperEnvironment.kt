@@ -5,7 +5,7 @@ import me.ezeh.copper.exception.InvalidVariableName
 import me.ezeh.copper.exception.MethodAlreadyExistsException
 import me.ezeh.copper.lang.methods.PrintMethod
 
-class CopperEnvironment {
+class CopperEnvironment { // TODO: merge with CopperObject?
     private val methods: MutableMap<String, CopperMethod> = mutableMapOf("print" to PrintMethod())
     private val variables: MutableMap<String, CopperValue> = mutableMapOf()
 
@@ -15,7 +15,6 @@ class CopperEnvironment {
         if (matches.isEmpty())
             throw InvalidMethodName(methodName)
 
-        assert(matches.size == 1) // assert there is only one match // TODO: assert?
         val match = matches[0]
         if (match.first != methodName) {
             // If name is not exactly the same // TODO: warning?
@@ -51,7 +50,7 @@ class CopperEnvironment {
     fun setVariable(variable: CopperVariable, value: CopperValue) = setVariable(variable.name, value)
 
     fun removeVariable(variable: String) {
-        variables.remove(variable)
+        variables.remove(variable.toLowerCase())
     }
 
     fun removeVariable(variable: CopperVariable) = removeVariable(variable.name)
@@ -62,9 +61,7 @@ class CopperEnvironment {
             var variable: CopperValue? = null
             var index = 0
             while (index < split.size) {
-                if (variable == null)
-                    variable = getVariable(split[index++])
-                variable = (variable as? CopperObject ?: break).getVariable(split[index])
+                variable = (variable as? CopperObject)?.getVariable(split[index++]) ?: getVariable(split[index++])
             }
             if (variable != null) {
                 return variable
