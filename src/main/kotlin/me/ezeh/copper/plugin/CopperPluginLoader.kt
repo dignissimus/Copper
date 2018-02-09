@@ -13,7 +13,6 @@ import java.io.File
 import java.util.regex.Pattern
 
 class CopperPluginLoader(val scriptDirectory: File) : PluginLoader {
-    val eventListener = CopperBukkitPluginListener(Copper.instance)
     override fun createRegisteredListeners(listener: Listener, plugin: Plugin): MutableMap<Class<out Event>, MutableSet<RegisteredListener>> {
         TODO("not implemented")
     }

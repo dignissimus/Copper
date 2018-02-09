@@ -5,14 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 
 class Copper : JavaPlugin() {
-    companion object {
-        var instance: Copper? = null
-    }
     private val scriptDirectory = File(dataFolder, "scripts")
-
-    override fun onLoad() {
-        instance = this
-    }
 
     override fun onEnable() {
         if (!scriptDirectory.exists())
