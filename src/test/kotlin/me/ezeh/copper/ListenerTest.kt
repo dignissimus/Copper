@@ -25,7 +25,7 @@ class ListenerTest {
         assertEquals(1, listeners.size)
 
         val listener = listeners[0]
-        assertEquals("PlayerJoinEvent", listener.listenerName)
+        assertEquals("PlayerJoinEvent", listener.eventName)
 
         val filters = listener.filters
         assertEquals(1, filters.size)

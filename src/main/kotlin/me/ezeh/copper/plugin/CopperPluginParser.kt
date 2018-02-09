@@ -19,28 +19,26 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
         programme.info = info
 
         for (methodDeclarationContext in context.methodDeclaration()) {
-            methods.add(visitMethodDeclaration(methodDeclarationContext))
+            programme.environment.addMethod(visitMethodDeclaration(methodDeclarationContext))
         }
         for (expressionContext in context.expression()) {
             programme.addExpression(visitExpression(expressionContext))
         }
         for(listenerContext in context.listener()){
-            programme.addListener(visitListener(listenerContext))
+            programme.listeners.add(visitListener(listenerContext))
         }
-        for (method in methods) {
-            programme.environment.addMethod(method.name, method)
-        }
+
         return programme
     }
 
     override fun visitListener(context: CopperParser.ListenerContext): CopperListener {
-        val listenerName = context.listener_name.text
+        val eventName = context.event_name.text
         val filterKeys = context.variable().map { it.text }
-        val expressions = context.expression().map { visitExpression(it) } // TODO: decide whether to evaluate now or later, currently evaluating when the event is fired
+        val expressions = context.expression().map { visitExpression(it) }
         val filterValues = expressions.dropLast(expressions.size - filterKeys.size) // return all the filter values
         val filters = filterKeys.zip(filterValues)
 
-        return CopperListener(listenerName, filters)
+        return CopperListener(eventName, filters, programme, expressions)
     }
 
     override fun visitInfo(context: CopperParser.InfoContext): CopperInfo {

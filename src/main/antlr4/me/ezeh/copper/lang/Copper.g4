@@ -13,21 +13,22 @@ expression:
     | variable;
 // TODO: operators, order of operations
 assignment: variable EQUALS expression;
-listener: ON listener_name=NAME ( (variable EQUALS expression (COMMA variable EQUALS expression)*)? | OPENBRACKET (variable EQUALS expression (COMMA variable EQUALS expression)*)? CLOSEBRACKET) ( OPENBRACE expression* CLOSEBRACE | expression);
+listener: ON event_name=NAME ( (variable EQUALS expression (COMMA variable EQUALS expression)*)? | OPENBRACKET (variable EQUALS expression (COMMA variable EQUALS expression)*)? CLOSEBRACKET)? ( OPENBRACE expression* CLOSEBRACE | expression);
 info: INFO OPENBRACE (variable COLON literal)* CLOSEBRACE;
 methodDeclaration: FUNCTION? method_name=NAME (OPENBRACKET (variable (COMMA variable)*)? CLOSEBRACE | variable*) (OPENBRACE expression* CLOSEBRACE | EQUALS expression);
-methodCall: method_name=NAME OPENBRACKET (expression (COMMA expression)*)? CLOSEBRACKET;
+methodCall: method_name=NAME (OPENBRACKET (expression (COMMA expression)*)? CLOSEBRACKET | expression (COMMA expression)*);
 bool: TRUE | FALSE;
 literal: DecimalLiteral | HexLiteral | StringLiteral;
 ifStatement: IF (expression|OPENBRACKET expression CLOSEBRACKET) THEN? (expression | OPENBRACE expression* CLOSEBRACE) elseStatement?;
 elseStatement: ELSE (expression| OPENBRACE expression* CLOSEBRACE);
 variable: NAME;
 returnStatement: RETURN expression;
-successful: SUCCESSFUL;
+successful: SUCCESSFUL | SUCCEEDED;
 unsuccessful: UNSUCCESSFUL | FAILED;
 
 SUCCESSFUL: 'successful';
 UNSUCCESSFUL: 'unsuccessful';
+SUCCEEDED:'succeeded';
 FAILED: 'failed';
 THEN: 'then';
 COMMA: ',';
@@ -54,7 +55,7 @@ OPENBRACKET: '(';
 CLOSEBRACKET: ')';
 OPENBRACE: '{';
 CLOSEBRACE: '}';
-NAME: [A-z_]+;
+NAME: [A-z_.]+;
 StringLiteral: '"' StringChar*? '"';
 DecimalLiteral: DecimalNumber;
 HexLiteral: '0x' HexNumber;

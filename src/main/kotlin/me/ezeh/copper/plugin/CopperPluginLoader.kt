@@ -1,5 +1,6 @@
 package me.ezeh.copper.plugin
 
+import me.ezeh.copper.Copper
 import me.ezeh.copper.lang.CopperLexer
 import me.ezeh.copper.lang.CopperParser
 import org.antlr.v4.runtime.CharStreams
@@ -12,6 +13,7 @@ import java.io.File
 import java.util.regex.Pattern
 
 class CopperPluginLoader(val scriptDirectory: File) : PluginLoader {
+    val eventListener = CopperBukkitPluginListener(Copper.instance)
     override fun createRegisteredListeners(listener: Listener, plugin: Plugin): MutableMap<Class<out Event>, MutableSet<RegisteredListener>> {
         TODO("not implemented")
     }

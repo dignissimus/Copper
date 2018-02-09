@@ -18,8 +18,9 @@ class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: Cop
 
     private val pluginDataFolder = File(pluginLoader.scriptDirectory, description.name)
     private val configFile = File(pluginDataFolder, CONFIG_FILE_NAME)
-    val pluginConfig = JsonConfiguration()
-    var pluginNaggable = false
+    private val pluginConfig = JsonConfiguration()
+    private var pluginNaggable = false
+    private var pluginIsEnabled = false
 
     override fun getDataFolder() = pluginDataFolder
 
@@ -47,9 +48,10 @@ class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: Cop
 
     override fun onEnable() {
         programme.execute()
+        pluginIsEnabled = true
     }
 
-    override fun isEnabled() = true // TODO?
+    override fun isEnabled() = pluginIsEnabled
 
     override fun onLoad() {
         // Do nothing
@@ -72,6 +74,7 @@ class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: Cop
         if (programme.environment.hasMethod("onDisable")) {
             programme.environment.getMethod("onDisable").call()
         }
+        pluginIsEnabled = false
     }
 
     override fun getDefaultWorldGenerator(worldName: String, id: String): ChunkGenerator? = null
