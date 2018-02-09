@@ -1,7 +1,6 @@
-package me.ezeh.copper.plugin
+package me.ezeh.copper.event
 
 import me.ezeh.copper.Copper
-import me.ezeh.copper.event.CopperBukkitEvent
 import me.ezeh.copper.lang.CopperProgramme
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
@@ -50,6 +49,6 @@ class CopperBukkitPluginListener(val plugin: Copper? = null) : Listener {
 
     @EventHandler
     fun onEvent(event: Event) {
-        CopperProgramme.prgrammes.map { it.fireEvent(CopperBukkitEvent(event)) } // TODO, use Bukkit api
+        CopperProgramme.fireEvent(CopperBukkitEvent(event)) // TODO, use Bukkit api
     }
 }

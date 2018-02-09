@@ -6,7 +6,10 @@ import org.bukkit.Bukkit
 
 class CopperProgramme : CopperExpression {
     companion object {
-        val prgrammes = arrayListOf<CopperProgramme>()
+        private val prgrammes = arrayListOf<CopperProgramme>()
+        fun fireEvent(event: CopperEvent) {
+            prgrammes.map { it.fireEvent(event) }
+        }
     }
     // TODO: does this have to be lateinit?
     lateinit var info: CopperInfo
