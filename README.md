@@ -1,7 +1,7 @@
 # Copper
 <p align="center">
   <a href="https://ci.dignissimus.co.uk/job/Copper"> <img src="https://ci.dignissimus.co.uk/job/Copper/badge/icon?branch=master"> </a>
-  <a href="https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)"> <img src="https://img.shields.io/github/license/spammy23/Copper.svg"> </a>
+  <a href="LICENSE"> <img src="https://img.shields.io/github/license/spammy23/Copper.svg"> </a>
 </p>
 
 ## About
