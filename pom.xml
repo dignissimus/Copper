@@ -146,6 +146,7 @@
                                 <excludes>
                                 </excludes>
                             </artifactSet>
+                            <minimizeJar>true</minimizeJar>
                         </configuration>
                     </execution>
                 </executions>

@@ -10,9 +10,6 @@ import me.ezeh.copper.lang.operation.unary.CopperPercent
 class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
     val programme = CopperProgramme()
     override fun visitProgramme(context: CopperParser.ProgrammeContext): CopperProgramme {
-        val expressions = ArrayList<CopperExpression>()
-        val methods = ArrayList<CopperMethodDeclaration>()
-        val listeners = ArrayList<CopperListener>()
         val info: CopperInfo
 
         if (context.info() != null) {
