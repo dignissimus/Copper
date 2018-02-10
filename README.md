@@ -1,5 +1,6 @@
 # Copper
-
+[![Build Status](https://ci.dignissimus.co.uk/job/Copper/badge/icon?branch=master)](https://ci.dignissimus.co.uk/job/Copper)
+[![license](https://img.shields.io/github/license/spammy23/Copper.svg)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))
 ## About
 
 > Copper was made to make it possible for non-programmers to easily write simple scripts
