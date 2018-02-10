@@ -20,7 +20,7 @@ testIfStatements {
 
 testBracelessIfStatement {
     BOOL = true
-    actual = if BOOL then successful else unsuccessful // Unnecessary 'then' // Returns unsuccessful, TODO: fix
+    return if BOOL then successful else unsuccessful // Unnecessary 'then'
 }
 
 print("Boolean Test (A)...")
