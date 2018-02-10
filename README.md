@@ -1,6 +1,9 @@
 # Copper
-[![Build Status](https://ci.dignissimus.co.uk/job/Copper/badge/icon?branch=master)](https://ci.dignissimus.co.uk/job/Copper)
-[![license](https://img.shields.io/github/license/spammy23/Copper.svg)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))
+<p align="center">
+  <a href="https://ci.dignissimus.co.uk/job/Copper"> <img src="https://ci.dignissimus.co.uk/job/Copper/badge/icon?branch=master"> </a>
+  <a href="https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)"> <img src="https://img.shields.io/github/license/spammy23/Copper.svg"> </a>
+</p>
+
 ## About
 
 > Copper was made to make it possible for non-programmers to easily write simple scripts
