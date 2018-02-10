@@ -1,6 +1,11 @@
 package me.ezeh.copper.plugin
 
 import me.ezeh.copper.lang.*
+import me.ezeh.copper.lang.operation.binary.*
+import me.ezeh.copper.lang.operation.unary.CopperFactorial
+import me.ezeh.copper.lang.operation.unary.CopperLogicalNot
+import me.ezeh.copper.lang.operation.unary.CopperNegation
+import me.ezeh.copper.lang.operation.unary.CopperPercent
 
 class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
     val programme = CopperProgramme()
@@ -29,6 +34,45 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
         }
 
         return programme
+    }
+
+    override fun visitExpression(context: CopperParser.ExpressionContext): CopperExpression { // TODO: move from assertions to exceptions, i18n on exceptions
+        val expressions = context.expression()
+        if (context.binop != null) {
+            // Binary operation
+            val left = visitExpression(context.left)
+            val right = visitExpression(context.right)
+            val binop = context.binop.text
+            return when (binop) {
+                "*" -> CopperMultiplication(programme, left, right)
+                "/" -> CopperDivision(programme, left, right)
+                "%" -> CopperModulus(programme, left, right)
+                "+" -> CopperAddition(programme, left, right)
+                "==" -> CopperEquality(programme, left, right)
+                "||", "or" -> CopperLogicalOr(programme, left, right)
+                "&&", "and" -> CopperLogicalAnd(programme, left, right)
+                else -> throw  AssertionError("$binop does not match any binary operator")
+            }
+        }
+        if (context.postunop != null) {
+            val operator = context.postunop.text
+            val operand = visitExpression(context.operand)
+            return when (operator) {
+                "!" -> CopperFactorial(programme, operand)
+                "%" -> CopperPercent(programme, operand)
+                else -> throw AssertionError("$operator does not match any Postfix Unary Operator")
+            }
+        }
+        if (context.preunop != null) {
+            val operator = context.preunop.text
+            val operand = visitExpression(context.operand)
+            return when (operator) {
+                "-" -> CopperNegation(programme, operand)
+                "!", "not" -> CopperLogicalNot(programme, operand)
+                else -> throw AssertionError("$operator does not match any Prefix Unary Operator")
+            }
+        }
+        return super.visitExpression(context)
     }
 
     override fun visitListener(context: CopperParser.ListenerContext): CopperListener {

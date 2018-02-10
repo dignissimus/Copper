@@ -1,5 +1,10 @@
 package me.ezeh.copper.lang
 
-class CopperType {
-
+enum class CopperType(val typeName: String) {
+    BOOLEAN("Boolean"),
+    NUMBER("Number"),
+    STRING("String"),
+    METHOD("Method"),
+    LISTENER("Listener"),
+    OBJECT("Object")
 }

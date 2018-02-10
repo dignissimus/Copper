@@ -5,7 +5,7 @@ import me.ezeh.copper.i18n.LangStorage
 import org.jtwig.JtwigModel
 import org.jtwig.JtwigTemplate
 
-abstract class CopperException(val langKey: CopperLangKey) : Throwable() {
+abstract class CopperException(val langKey: CopperLangKey) : Exception() {
     override val message: String
         get() = template.render(model)
     val template = JtwigTemplate.inlineTemplate(LangStorage.getFormatString(langKey))

@@ -23,7 +23,7 @@ testBracelessIfStatement {
     actual = if BOOL then successful else unsuccessful // Unnecessary 'then' // Returns unsuccessful, TODO: fix
 }
 
-print("Boolean Test (A)...") // TODO: make brackets unnecessary in function calls with at least one parameter
+print("Boolean Test (A)...")
 print(testIfStatements())
 
 print("Boolean Test (B)...")

@@ -10,7 +10,21 @@ expression:
     | successful
     | unsuccessful
     | returnStatement // Passing off a statement like this as an expression probably won't do well
-    | variable;
+    | variable
+    | operand=expression postunop=BANG // Factorial-ise
+    | operand=expression postunop=PERCENT // Percentage-isation
+    | preunop=MINUS operand=expression // Mathematical Negation
+    | preunop=NOT operand=expression // Logical not
+    | left=expression binop=MULTIPLY right=expression // Multiplication
+    | left=expression binop=DIVIDE right=expression // Division
+    | left=expression binop=PERCENT right=expression  // Modulo Division
+    | left=expression binop=ADD right=expression // Addition
+    | left=expression binop=MINUS right=expression // Subtraction
+    | left=expression binop=EQUALSEQUALS right=expression // Equality
+    | left=expression binop=AND right=expression // Logical and
+    | left=expression binop=OR right=expression // Logical or
+    ;
+
 // TODO: operators, order of operations
 assignment: variable EQUALS expression;
 listener: ON event_name=NAME ( (variable EQUALS expression (COMMA variable EQUALS expression)*)? | OPENBRACKET (variable EQUALS expression (COMMA variable EQUALS expression)*)? CLOSEBRACKET)? ( OPENBRACE expression* CLOSEBRACE | expression);
@@ -37,13 +51,20 @@ ON: 'on';
 RETURN: 'return';
 FUNCTION: 'function';
 INFO: 'info';
-BINOP:
-    [+*/-]
-    |'and'
-    | 'or';
 
-POSTUNOP: '!';
-PREUNOP: '-';
+MULTIPLY: '*';
+DIVIDE: '/';
+ADD: '+';
+MINUS: '-';
+
+AND: '&&' | 'and';
+OR: 'or' | '||';
+NOT: '!' | 'not';
+
+PERCENT: '%';
+BANG: '!';
+
+EQUALSEQUALS: '=='; // hehe
 EQUALS: '=';
 
 TRUE: 'true';
