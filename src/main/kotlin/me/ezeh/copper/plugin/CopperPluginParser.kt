@@ -34,7 +34,6 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
     }
 
     override fun visitExpression(context: CopperParser.ExpressionContext): CopperExpression { // TODO: move from assertions to exceptions, i18n on exceptions
-        val expressions = context.expression()
         if (context.binop != null) {
             // Binary operation
             val left = visitExpression(context.left)
@@ -70,6 +69,13 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
             }
         }
         return super.visitExpression(context)
+    }
+
+    override fun visitClassDeclaration(context: CopperParser.ClassDeclarationContext): CopperClass {
+        val className = context.class_name.text
+        val methods = context.methodDeclaration().map { visitMethodDeclaration(it) }
+        val init = if (context.init() != null) visitInit(context.init()) else null
+        return CopperClass(programme, className, init, methods)
     }
 
     override fun visitListener(context: CopperParser.ListenerContext): CopperListener {

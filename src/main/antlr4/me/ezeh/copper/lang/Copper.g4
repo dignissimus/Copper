@@ -1,6 +1,6 @@
 grammar Copper;
 
-programme: info? (methodDeclaration | listener | expression)*;
+programme: info? (classDeclaration | methodDeclaration | listener | expression)*;
 expression:
     methodCall
     | bool
@@ -25,11 +25,11 @@ expression:
     | left=expression binop=OR right=expression // Logical or
     ;
 
-// TODO: operators, order of operations
+classDeclaration: CLASS class_name=NAME OPENBRACE init? (classDeclaration | methodDeclaration)* CLOSEBRACE; // listeners inside?
 assignment: variable EQUALS expression;
 listener: ON event_name=NAME ( (variable EQUALS expression (COMMA variable EQUALS expression)*)? | OPENBRACKET (variable EQUALS expression (COMMA variable EQUALS expression)*)? CLOSEBRACKET)? ( OPENBRACE expression* CLOSEBRACE | expression);
 info: INFO OPENBRACE (variable COLON literal)* CLOSEBRACE;
-methodDeclaration: FUNCTION? method_name=NAME (OPENBRACKET (variable (COMMA variable)*)? CLOSEBRACE | variable*) (OPENBRACE expression* CLOSEBRACE | EQUALS expression);
+methodDeclaration: FUNCTION? method_name=NAME (OPENBRACKET (variable (COMMA variable)*)? CLOSEBRACKET| variable*) (OPENBRACE expression* CLOSEBRACE | EQUALS expression);
 methodCall: method_name=NAME (OPENBRACKET (expression (COMMA expression)*)? CLOSEBRACKET | expression (COMMA expression)*);
 bool: TRUE | FALSE;
 literal: DecimalLiteral | HexLiteral | StringLiteral;
@@ -39,7 +39,10 @@ variable: NAME;
 returnStatement: RETURN expression;
 successful: SUCCESSFUL | SUCCEEDED;
 unsuccessful: UNSUCCESSFUL | FAILED;
+init: INIT OPENBRACE expression* CLOSEBRACE;
 
+INIT: 'init';
+CLASS: 'class';
 SUCCESSFUL: 'successful';
 UNSUCCESSFUL: 'unsuccessful';
 SUCCEEDED:'succeeded';
@@ -49,7 +52,7 @@ COMMA: ',';
 COLON: ':';
 ON: 'on';
 RETURN: 'return';
-FUNCTION: 'function';
+FUNCTION: 'function' | 'fun';
 INFO: 'info';
 
 MULTIPLY: '*';

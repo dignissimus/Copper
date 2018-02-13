@@ -28,3 +28,19 @@ print(testIfStatements())
 
 print("Boolean Test (B)...")
 print(testBracelessIfStatement())
+
+
+class ClassName {
+    init {
+        print("Initialised")
+    }
+
+    function secondMethod() = 5
+
+    function method(){
+        return 1
+    }
+}
+
+object = ClassName()
+object.secondMethod()

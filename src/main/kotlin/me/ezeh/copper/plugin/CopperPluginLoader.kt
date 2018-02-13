@@ -1,6 +1,5 @@
 package me.ezeh.copper.plugin
 
-import me.ezeh.copper.Copper
 import me.ezeh.copper.lang.CopperLexer
 import me.ezeh.copper.lang.CopperParser
 import org.antlr.v4.runtime.CharStreams
@@ -12,7 +11,7 @@ import org.bukkit.plugin.*
 import java.io.File
 import java.util.regex.Pattern
 
-class CopperPluginLoader(val scriptDirectory: File) : PluginLoader {
+class CopperPluginLoader(val scriptDirectory: File) : PluginLoader { // TODO: i18n on exceptions?
     override fun createRegisteredListeners(listener: Listener, plugin: Plugin): MutableMap<Class<out Event>, MutableSet<RegisteredListener>> {
         TODO("not implemented")
     }
@@ -32,7 +31,9 @@ class CopperPluginLoader(val scriptDirectory: File) : PluginLoader {
         if (plugin !is CopperPlugin)
             throw IllegalArgumentException("Plugin is not associated with this PluginLoader")
 
-//        if(plugin.isEnabled) // TODO: isEnabled check
+        if (plugin.isEnabled) {
+
+        }
 
         plugin.onEnable()
         println("Enabled plugin '${plugin.name}'")

@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
 class JsonConfiguration : FileConfiguration() {
-    var values = emptyMap<String, Any>()
-    val mapType = object : TypeToken<HashMap<String, Any>>() {}.type
+    private var values = emptyMap<String, Any>()
+    private val mapType = object : TypeToken<HashMap<String, Any>>() {}.type
     override fun loadFromString(contents: String) {
         values = Gson().fromJson(contents, mapType)
     }
@@ -19,7 +19,7 @@ class JsonConfiguration : FileConfiguration() {
     override fun saveToString(): String = Gson().toJson(values)
 
 
-    override fun buildHeader() = "" // TODO: implement
+    override fun buildHeader() = ""
 
     override fun getKeys(deep: Boolean) = values.keys // TODO: deep
 

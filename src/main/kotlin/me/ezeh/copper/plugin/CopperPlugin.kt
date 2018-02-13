@@ -13,12 +13,12 @@ import java.io.InputStream
 
 class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: CopperPluginLoader) : PluginBase() {
     companion object {
-        val CONFIG_FILE_NAME = "config.json"
+        const val CONFIG_FILE_NAME = "config.json"
     }
 
     private val pluginDataFolder = File(pluginLoader.scriptDirectory, description.name)
     private val configFile = File(pluginDataFolder, CONFIG_FILE_NAME)
-    private val pluginConfig = JsonConfiguration()
+    private val pluginConfig = JsonConfiguration() // TODO: custom config type?
     private var pluginNaggable = false
     private var pluginIsEnabled = false
 
@@ -81,7 +81,7 @@ class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: Cop
 
     override fun saveConfig() = config.save(configFile)
 
-    override fun saveResource(p0: String?, p1: Boolean) {
+    override fun saveResource(path: String, overwrite: Boolean) {
         TODO("not implemented")
     }
 
