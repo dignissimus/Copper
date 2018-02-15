@@ -5,7 +5,7 @@ import me.ezeh.copper.lang.CopperStatus
 import me.ezeh.copper.lang.CopperValue
 
 class PrintMethod : CopperMethod("print") {
-    override fun call(vararg parameters: CopperValue): CopperValue {
+    override fun call(vararg parameters: CopperValue): CopperStatus {
         println(parameters.map { it.value }.joinToString(" "))
         return CopperStatus.SUCCESS
     }

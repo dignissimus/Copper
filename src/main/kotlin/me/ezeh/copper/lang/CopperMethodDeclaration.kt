@@ -2,7 +2,7 @@ package me.ezeh.copper.lang
 
 import me.ezeh.copper.exception.InvalidArgumentSizeException
 
-class CopperMethodDeclaration(name: String, val args: Array<CopperParameter>, val expressions: Array<CopperExpression>, val programme: CopperProgramme) : CopperMethod(name) {
+class CopperMethodDeclaration(name: String, val args: Array<CopperParameter>, val expressions: Array<CopperExpression>, val programme: CopperProgramme, val static: Boolean = true) : CopperMethod(name) { // TODO: take environment param at call as opposed to a programme at init? Take Environment at init?
     override fun call(vararg parameters: CopperValue): CopperValue {
         if (parameters.size != args.size) {
             throw InvalidArgumentSizeException(name, args.size, parameters.size)
@@ -19,6 +19,6 @@ class CopperMethodDeclaration(name: String, val args: Array<CopperParameter>, va
         return CopperStatus.FAILURE
     }
 
-    constructor(name: String, args: List<CopperParameter>, expressions: List<CopperExpression>, programme: CopperProgramme) : this(name, args.toTypedArray(), expressions.toTypedArray(), programme)
+    constructor(name: String, args: List<CopperParameter>, expressions: List<CopperExpression>, programme: CopperProgramme, static: Boolean = true) : this(name, args.toTypedArray(), expressions.toTypedArray(), programme, static)
 }
 

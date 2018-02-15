@@ -29,7 +29,14 @@ classDeclaration: CLASS class_name=NAME OPENBRACE init? (classDeclaration | meth
 assignment: variable EQUALS expression;
 listener: ON event_name=NAME ( (variable EQUALS expression (COMMA variable EQUALS expression)*)? | OPENBRACKET (variable EQUALS expression (COMMA variable EQUALS expression)*)? CLOSEBRACKET)? ( OPENBRACE expression* CLOSEBRACE | expression);
 info: INFO OPENBRACE (variable COLON literal)* CLOSEBRACE;
-methodDeclaration: FUNCTION? method_name=NAME (OPENBRACKET (variable (COMMA variable)*)? CLOSEBRACKET| variable*) (OPENBRACE expression* CLOSEBRACE | EQUALS expression);
+methodDeclaration: STATIC?
+     FUNCTION? method_name=NAME
+        (OPENBRACKET (variable (COMMA variable)*)? CLOSEBRACKET | variable*) // args
+        (OPENBRACE expression* CLOSEBRACE)
+    | FUNCTION method_name=NAME
+        (OPENBRACKET (variable (COMMA variable)*)? CLOSEBRACKET | variable*) // args
+        EQUALS expression
+    ;
 methodCall: method_name=NAME (OPENBRACKET (expression (COMMA expression)*)? CLOSEBRACKET | expression (COMMA expression)*);
 bool: TRUE | FALSE;
 literal: DecimalLiteral | HexLiteral | StringLiteral;
@@ -54,6 +61,7 @@ ON: 'on';
 RETURN: 'return';
 FUNCTION: 'function' | 'fun';
 INFO: 'info';
+STATIC: 'static';
 
 MULTIPLY: '*';
 DIVIDE: '/';

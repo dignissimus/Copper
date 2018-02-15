@@ -3,23 +3,21 @@ package me.ezeh.copper.lang
 import me.ezeh.copper.exception.InvalidMethodName
 import me.ezeh.copper.exception.InvalidVariableName
 import me.ezeh.copper.exception.MethodAlreadyExistsException
+import me.ezeh.copper.lang.methods.PrintFormat
 import me.ezeh.copper.lang.methods.PrintMethod
 
 class CopperEnvironment { // TODO: merge with CopperObject?
-    private val methods: MutableMap<String, CopperMethod> = mutableMapOf("print" to PrintMethod())
+    private val methods: MutableMap<String, CopperMethod> = mutableMapOf("print" to PrintMethod(), "printf" to PrintFormat())
     private val variables: MutableMap<String, CopperValue> = mutableMapOf()
 
     fun getMethod(methodName: String): CopperMethod {
-        val matches = methods.toList().filter { it.second.name.toLowerCase() == methodName.toLowerCase() }
-
-        if (matches.isEmpty())
-            throw InvalidMethodName(methodName)
-
-        val match = matches[0]
-        if (match.first != methodName) {
-            // If name is not exactly the same // TODO: warning?
+        val split = methodName.split(".")
+        if (split.size > 1) {
+            val methodName = split.last()
+            val varName = split.dropLast(1).joinToString(".")
+            return (getVariable(varName) as CopperObject).getMethod(methodName)
         }
-        return match.second
+        return methods[methodName] ?: throw InvalidMethodName(methodName)
 
     }
 
@@ -35,16 +33,10 @@ class CopperEnvironment { // TODO: merge with CopperObject?
         methods.remove(methodName)
     }
 
-    fun hasMethod(methodName: String): Boolean = !methods.filter { it.key.toLowerCase() == methodName.toLowerCase() }.isEmpty()
+    fun hasMethod(methodName: String) = methods.containsKey(methodName)
 
     fun setVariable(varName: String, value: CopperValue) {
-        if (hasVariable(varName)) {
-            val matches = variables.toList().filter { it.first.toLowerCase() == varName.toLowerCase() }
-            val match = matches[0]
-            variables[match.first] = value
-        }
-        else
-            variables[varName] = value
+        variables[varName] = value
     }
 
     fun setVariable(variable: CopperVariable, value: CopperValue) = setVariable(variable.name, value)
@@ -70,17 +62,9 @@ class CopperEnvironment { // TODO: merge with CopperObject?
         if (!hasVariable(varName))
             throw InvalidVariableName(varName)
 
-        val matches = variables.toList().filter { it.first.toLowerCase() == varName.toLowerCase() }
-        val match = matches[0]
-
-        if (match.first != varName) { // If variable name is not exactly the same
-            // TODO: warning?
-        }
-
-        return match.second
-
+        return variables[varName] ?: throw InvalidVariableName(varName)
     }
 
-    fun hasVariable(varName: String) = !variables.filter { it.key.toLowerCase() == varName.toLowerCase() }.isEmpty()
+    fun hasVariable(varName: String) = variables.containsKey(varName)
 
 }

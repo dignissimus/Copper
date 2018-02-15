@@ -14,7 +14,7 @@ class CopperProgramme : CopperExpression {
     // TODO: does this have to be lateinit?
     lateinit var info: CopperInfo
     val listeners = mutableListOf<CopperListener>()
-    val expressions = mutableListOf<CopperExpression>()
+    private val expressions = mutableListOf<CopperExpression>()
     val environment = CopperEnvironment()
     val plugin: CopperPlugin
         get() = Bukkit.getPluginManager().getPlugin(info.asDescriptionFile().name) as CopperPlugin
@@ -42,7 +42,12 @@ class CopperProgramme : CopperExpression {
     }
 
     fun fireEvent(event: CopperEvent) {
-        listeners.filter { it.eventName == event.name }.map { it.executeCopperEvent(event) }
+        listeners.filter { it.eventName == event.name }.map { it.executeCopperEvent(event) } // TODO: subclasses
+    }
+
+    fun addClass(clazz: CopperClass) {
+        environment.setVariable(clazz.name, clazz)
+        environment.addMethod(clazz.constructor)
     }
 
 }

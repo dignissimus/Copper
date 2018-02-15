@@ -27,7 +27,10 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
             programme.addExpression(visitExpression(expressionContext))
         }
         for(listenerContext in context.listener()){
-            programme.listeners.add(visitListener(listenerContext))
+            programme.addListener(visitListener(listenerContext))
+        }
+        for (classDeclarationContext in context.classDeclaration()) {
+            programme.addClass(visitClassDeclaration(classDeclarationContext))
         }
 
         return programme
@@ -78,6 +81,10 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
         return CopperClass(programme, className, init, methods)
     }
 
+    override fun visitInit(context: CopperParser.InitContext): CopperMethodDeclaration { // TODO: method?
+        return CopperMethodDeclaration("init", emptyArray(), emptyArray(), programme)
+    }
+
     override fun visitListener(context: CopperParser.ListenerContext): CopperListener {
         val eventName = context.event_name.text
         val filterKeys = context.variable().map { it.text }
@@ -124,7 +131,12 @@ class CopperPluginParser : CopperBaseVisitor<CopperExpression>() {
 
     override fun visitMethodDeclaration(context: CopperParser.MethodDeclarationContext): CopperMethodDeclaration {
 
-        return CopperMethodDeclaration(context.method_name.text, context.variable().map { CopperParameter(it.text) }, context.expression().map { visitExpression(it) }, programme)
+        return CopperMethodDeclaration(context.method_name.text, context.variable().map { CopperParameter(it.text) },
+                if (context.EQUALS() != null)
+                    context.expression().map { CopperReturn(visitExpression(it)) } // only one expression
+                else
+                    context.expression().map { visitExpression(it) },
+                programme, context.STATIC() != null)
     }
 
     override fun visitLiteral(context: CopperParser.LiteralContext): CopperExpression {

@@ -1,8 +1,8 @@
 package me.ezeh.copper.i18n
 
 object LangStorage {
-    val DEFAULT_LOCALE = Locale.ENGLISH_GB
-    fun getFormatString(langKey: CopperLangKey, locale: Locale): String {
+    private val DEFAULT_LOCALE = Locale.ENGLISH_GB
+    private fun getFormatString(langKey: CopperLangKey, locale: Locale): String {
         return langKey.defaultString // TODO: other languages
     }
 

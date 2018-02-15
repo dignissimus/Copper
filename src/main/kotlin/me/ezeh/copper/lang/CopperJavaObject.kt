@@ -16,7 +16,7 @@ open class CopperJavaObject(private val javaObject: Any) : CopperObject() {
         }
     }
 
-    override fun getMethod(name: String, value: CopperValue): CopperMethod {
+    override fun getMethod(name: String): CopperMethod {
         return CopperJavaMethod(javaClass.methods.filter { it.name == name })
     }
 

@@ -47,7 +47,6 @@ class CopperBukkitPluginListener(val plugin: Copper? = null) : Listener {
         }
     }
 
-    @EventHandler
     fun onEvent(event: Event) {
         CopperProgramme.fireEvent(CopperBukkitEvent(event)) // TODO, use Bukkit api
     }

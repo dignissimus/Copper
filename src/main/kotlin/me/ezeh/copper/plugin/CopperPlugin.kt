@@ -18,7 +18,7 @@ class CopperPlugin(val programme: CopperProgramme, private val pluginLoader: Cop
 
     private val pluginDataFolder = File(pluginLoader.scriptDirectory, description.name)
     private val configFile = File(pluginDataFolder, CONFIG_FILE_NAME)
-    private val pluginConfig = JsonConfiguration() // TODO: custom config type?
+    private val pluginConfig = JsonConfiguration() // TODO: custom config types?
     private var pluginNaggable = false
     private var pluginIsEnabled = false
 
