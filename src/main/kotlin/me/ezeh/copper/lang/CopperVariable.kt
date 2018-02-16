@@ -1,5 +1,5 @@
 package me.ezeh.copper.lang
 
-class CopperVariable(val name: String, val programme: CopperProgramme) : CopperExpression {
-    override fun evaluate(): CopperExpression = programme.environment.getVariable(name).asValue()
+class CopperVariable(val name: String, private val environment: CopperEnvironment) : CopperExpression {
+    override fun evaluate(): CopperExpression = environment.getVariable(name).asValue()
 }

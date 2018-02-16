@@ -1,11 +1,9 @@
 package me.ezeh.copper.lang
 
-import me.ezeh.copper.exception.InvalidMethodName
-
-class CopperMethodCall(val methodName: String, val arguments: List<CopperExpression>, val programme: CopperProgramme) : CopperExpression {
+class CopperMethodCall(val methodName: String, val arguments: List<CopperExpression>, val environment: CopperEnvironment) : CopperExpression {
     override fun evaluate(): CopperExpression {
-        return programme.environment.getMethod(methodName).call(*(arguments.map { it.evaluate().asValue() }.toTypedArray()))
+        return environment.getMethod(methodName).call(*(arguments.map { it.evaluate().asValue() }.toTypedArray()))
     }
 
-    constructor(methodName: String, arguments: Array<CopperExpression>, programme: CopperProgramme) : this(methodName, arguments.toList(), programme)
+    constructor(methodName: String, arguments: Array<CopperExpression>, environment: CopperEnvironment) : this(methodName, arguments.toList(), environment)
 }
