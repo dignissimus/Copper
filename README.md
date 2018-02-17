@@ -6,7 +6,7 @@
 
 ## About
 
-> Copper was made to make it possible for non-programmers to easily write simple scripts
+> Copper was made to make it easy for Developers to write simple scripts
 
 ## Usage
 ```javascript
