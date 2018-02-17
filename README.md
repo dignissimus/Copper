@@ -65,6 +65,27 @@ With if statements, the brackets around the condition are unneccesary but when l
 BOOL = false
 value = if bool then 0 else 1 // Value should equal 1
 ```
+
+Classes can be defined with the keyword `class`, they may optionally contain an init block at the top as well as as many other classes or methods inside of it.
+```javascript
+class MyClass {
+  init {
+    print("Initialised!")
+  }
+  
+  method {
+    print("Hello!")
+  }
+  
+  static staticMethod {
+    print("Static!")
+  }
+}
+
+Myclass.staticMethod()
+object = MyClass()
+object.method()
+```
 ## Installation
 
 > To install, place the Copper.jar archive in your plugins folder and insert your Copper scripts in the `plugins/Copper/scripts` directory created when the plugin first runs
